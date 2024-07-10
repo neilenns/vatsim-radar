@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  # Update this to the name of the service you want to work with in your docker-compose.yml file
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
+
+    volumes:
+      - ..:/radar:cached
+
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=localhost
+      - MYSQL_DATABASE=radar
+      - DATABASE_URL=mysql://root:localhost@db:3306/radar?schema=public
+      - VATSIM_CLIENT_SECRET=QqahebIdibK4rNsFyg8AKbx9lbdYpORwDuR0NBDe
+      - VATSIM_ENDPOINT=https://auth-dev.vatsim.net
+      - DOMAIN=https://localhost:8080
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    command: sleep infinity
+
+  db:
+    image: mysql
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=radar
+      - MYSQL_ROOT_PASSWORD=localhost
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 5s
+      interval: 5s
+      retries: 40
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
