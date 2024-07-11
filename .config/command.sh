@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# Initialize skipDev flag
+skipDev=false
+
+# Loop through all arguments
+for arg in "$@"
+do
+  if [ "$arg" = "skipDev" ]; then
+    skipDev=true
+    break
+  fi
+done
+
 if ! [ -d "/radar/.config/certs" ]; then
     mkdir /radar/.config/certs
     echo "[ req ]\n\
@@ -21,6 +33,13 @@ fi
 cd /radar
 yarn
 npx prisma generate
-npx prisma migrate deploy
+npx prisma migrate deployI de
 rm -rf /tmp/nitro/worker-*
-exec yarn dev --qr=false
+
+# Conditionally execute based on skipDev flag
+if [ "$skipDev" = true ]; then
+  echo "Parameter skipDev provided, skipping yarn dev"
+else
+  echo "No skipDev parameter provided, running yarn dev"
+  exec yarn dev --qr=false
+fi
