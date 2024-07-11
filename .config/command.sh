@@ -33,7 +33,7 @@ fi
 cd /radar
 yarn
 npx prisma generate
-npx prisma migrate deployI de
+npx prisma migrate deploy
 rm -rf /tmp/nitro/worker-*
 
 # Conditionally execute based on skipDev flag

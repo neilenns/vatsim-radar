@@ -22,7 +22,7 @@
 	// Uncomment the next line if you want to keep your containers running after VS Code shuts down.
 	// "shutdownAction": "none",
 	// Uncomment the next line to run commands after the container is created.
-	"postCreateCommand": "cp .env.example .env && yarn install && ./.config/command.sh skipDev",
+	"postCreateCommand": "cp .env.example .env && ./.config/command.sh skipDev",
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root",
 	"customizations": {
